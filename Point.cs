@@ -1,6 +1,6 @@
 ﻿namespace Architecture
 {
-    public readonly struct Point
+    public class Point
     {
         public int X { get; }
         public int Y { get; }

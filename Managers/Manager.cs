@@ -35,16 +35,10 @@ namespace Architecture.Managers
 
         public void Clear() => EntitiesToRemove.AddRange(Entities);
 
-        public virtual void OnWindowResize(Screen oldScreen, Screen newScreen)
-        {
-            foreach (var entity in Entities)
-                entity.OnWindowResize(oldScreen, newScreen);
-        }
-
-        public void DrawEntities(SpriteBatch spriteBatch)
+        public void DrawEntities(SpriteBatch spriteBatch, Screen screen)
         {
             foreach (var entity in Entities.OrderBy(e => e.DrawOrder))
-                entity.Draw(spriteBatch);
+                entity.Draw(spriteBatch, screen);
         }
     }
 }

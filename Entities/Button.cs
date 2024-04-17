@@ -9,16 +9,21 @@ namespace Architecture.Entities
         protected readonly Color InitialTextColor;
         protected Color TextColor;
         protected bool IsHovering;
-        protected Sprite.Sprite ButtonSprite;
         protected SpriteFont Font;
 
-        public Rectangle Rectangle => new(Position.X, Position.Y, Width, Height);
+        public Rectangle ButtonRectangle(Screen screen)
+        {
+            var coordinate = Position.GetCoordinate(screen, Width, Height);
+            return new Rectangle(coordinate.X, coordinate.Y, Width, Height);
+        }
+
+        public Button(Position position, int drawOrder, Sprite.Sprite sprite, SpriteFont font, Color textColor, string text = "")
+            :this(position, sprite.Width, sprite.Height, drawOrder, sprite, font, textColor, text) { } // (1
 
         public Button(
-            int drawOrder, Sprite.Sprite buttonSprite, SpriteFont font, Color textColor, 
-            Point position, int width, int height, string text = "") : base(position, width, height, drawOrder)
+            Position position, int width, int height, int drawOrder, Sprite.Sprite sprite, SpriteFont font, Color textColor, 
+            string text = "") : base(position, width, height, drawOrder, sprite)
         {
-            ButtonSprite = buttonSprite;
             Font = font;
             InitialTextColor = textColor;
             Text = text;
@@ -39,25 +44,27 @@ namespace Architecture.Entities
             TextColor = Color.Red;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Screen screen)
         {
             if (IsHovering)
                 OnHover();
             else
                 OnLeave();
 
-            ButtonSprite.Draw(spriteBatch, Position);
+            var coordinates = Position.GetCoordinate(screen, Width, Height);
+
+            Sprite?.Draw(spriteBatch, coordinates);
 
             if (string.IsNullOrEmpty(Text)) return;
 
-            var x = (Position.X + (float)Width / 2) - (Font.MeasureString(Text).X / 2);
-            var y = (Position.Y + (float)Height / 2) - (Font.MeasureString(Text).Y / 2);
+            var x = (coordinates.X + (float)Width / 2) - (Font.MeasureString(Text).X / 2);
+            var y = (coordinates.Y + (float)Height / 2) - (Font.MeasureString(Text).Y / 2);
 
             spriteBatch.DrawString(Font, Text, new Vector2(x, y), TextColor);
         }
 
         public bool CheckIntersection(Screen screen) => 
-            new Rectangle(screen.MousePosition.X, screen.MousePosition.Y, 1, 1).Intersects(Rectangle);
+            new Rectangle(screen.MousePosition.X, screen.MousePosition.Y, 1, 1).Intersects(ButtonRectangle(screen));
 
 
         public override void Update(GameTime gameTime, Screen screen)

@@ -7,7 +7,6 @@ namespace Architecture.Entities
     {
         public int DrawOrder { get; }
         public void Update(GameTime gameTime, Screen screen);
-        public void Draw(SpriteBatch spriteBatch);
-        public void OnWindowResize(Screen oldScreen, Screen newScreen);
+        public void Draw(SpriteBatch spriteBatch, Screen screen);
     }
 }

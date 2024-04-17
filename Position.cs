@@ -8,12 +8,12 @@
 
     public struct Position
     {
-        private Point _info;
+        private readonly Point _coordinates;
         public PositionType Type { get; private set; }
 
         public Position(int x, int y, PositionType type)
         {
-            if (type == PositionType.Pixels)
+            if (type == PositionType.Percents)
             {
                 if (x is < 0 or > 100)
                     throw new ArgumentOutOfRangeException(nameof(x),
@@ -27,17 +27,19 @@
             {
                 Type = PositionType.Pixels;
             }
-            _info = new Point(x, y);
+            _coordinates = new Point(x, y);
         }
 
-        public Point GetCoordinate(Screen screen)
+        public Point GetCoordinate(Screen screen, int width, int height) => 
+            GetCoordinate(screen.Width, screen.Height, width, height);
+
+        public Point GetCoordinate(int screenWidth, int screenHeight, 
+            int objectWidth, int objectHeight)
         {
             if (Type == PositionType.Pixels)
-                return _info;
-            return new Point(
-                               (int)(_info.X * screen.Width / 100.0),
-                                              (int)(_info.Y * screen.Height / 100.0)
-                                          );
+                return _coordinates;
+            return new Point((screenWidth - objectWidth) * _coordinates.X / 100, 
+                (screenHeight - objectHeight) * _coordinates.Y / 100);
         }
 
     }

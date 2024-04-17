@@ -50,8 +50,18 @@ namespace Architecture.Sprite
             Height = height;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Point position) =>
-            spriteBatch.Draw(Texture, new Rectangle(position.X, position.Y, Width, Height), Color.White);
+        public static Texture2D GeSolidColorTexture(GraphicsDevice graphicsDevice, Color color, int width, int height)
+        {
+            var texture = new Texture2D(graphicsDevice, width, height);
+            var data = new Color[width * height];
+            for (var i = 0; i < data.Length; ++i)
+                data[i] = color;
+            texture.SetData(data);
+            return texture;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Point positionInPixels) =>
+            spriteBatch.Draw(Texture, new Rectangle(positionInPixels.X, positionInPixels.Y, Width, Height), Color.White);
 
     }
 }

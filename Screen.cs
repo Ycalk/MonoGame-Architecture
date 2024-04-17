@@ -1,11 +1,5 @@
 ﻿namespace Architecture
 {
-    public enum ScreenType
-    {
-        Window,
-        Fullscreen
-    }
-
     public readonly struct Screen 
     {
         public int Width { get; }

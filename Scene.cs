@@ -8,22 +8,14 @@ namespace Architecture
 {
     public class Scene
     {
-        public Sprite.Sprite Background { get; }
+        Texture2D Background { get; }
 
         protected readonly ButtonManager ButtonManager;
-        protected Point Position;
 
-        public Scene(IEnumerable<Button> buttons, Sprite.Sprite background, Point position)
+        public Scene(IEnumerable<Button> buttons, Texture2D background)
         {
             ButtonManager = new ButtonManager(buttons);
             Background = background;
-        }
-
-        public virtual void OnWindowResize(Screen oldScreen, Screen newScreen)
-        {
-            Background.Height = newScreen.Height;
-            Background.Width = newScreen.Width;
-            ButtonManager.OnWindowResize(oldScreen, newScreen);
         }
 
         public virtual void Update(GameTime gameTime, Screen screen)
@@ -31,10 +23,10 @@ namespace Architecture
             ButtonManager.Manage(gameTime, screen);
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch, Screen screen)
         {
-            Background.Draw(spriteBatch, Position);
-            ButtonManager.DrawEntities(spriteBatch);
+            spriteBatch.Draw(Background, new Rectangle(0, 0, screen.Width, screen.Height), Color.White);
+            ButtonManager.DrawEntities(spriteBatch, screen);
         }
     }
 }
