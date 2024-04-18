@@ -5,7 +5,7 @@ namespace Architecture.Sprite
 {
     public class Sprite
     {
-        public Texture2D Texture { get; set; }
+        public Texture2D Texture { get; }
 
         private int _width;
         private int _height;

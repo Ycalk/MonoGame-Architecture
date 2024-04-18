@@ -6,9 +6,17 @@ namespace Architecture.Entities
     public class Button : Entity
     {
         protected string Text;
-        protected readonly Color InitialTextColor;
         protected Color TextColor;
-        protected bool IsHovering;
+
+        protected readonly Color InitialTextColor;
+        protected Color HoveringTextColor = Color.Blue;
+        protected Color PressingTextColor = Color.Red;
+
+        public bool IsPressed;
+        protected bool IsHovered;
+        
+        private bool _hovering;
+        private bool _pressing;
         protected SpriteFont Font;
 
         public Rectangle ButtonRectangle(Screen screen)
@@ -18,7 +26,7 @@ namespace Architecture.Entities
         }
 
         public Button(Position position, int drawOrder, Sprite.Sprite sprite, SpriteFont font, Color textColor, string text = "")
-            :this(position, sprite.Width, sprite.Height, drawOrder, sprite, font, textColor, text) { } // (1
+            :this(position, sprite.Width, sprite.Height, drawOrder, sprite, font, textColor, text) { }
 
         public Button(
             Position position, int width, int height, int drawOrder, Sprite.Sprite sprite, SpriteFont font, Color textColor, 
@@ -26,12 +34,13 @@ namespace Architecture.Entities
         {
             Font = font;
             InitialTextColor = textColor;
+            TextColor = InitialTextColor;
             Text = text;
         }
 
         public virtual void OnHover()
         {
-            TextColor = Color.Blue;
+            TextColor = HoveringTextColor;
         }
 
         public virtual void OnLeave()
@@ -39,17 +48,45 @@ namespace Architecture.Entities
             TextColor = InitialTextColor;
         }
 
-        public virtual void OnClick()
+        public virtual void OnPress()
         {
-            TextColor = Color.Red;
+            TextColor = PressingTextColor;
+        }
+
+        public virtual void OnRelease()
+        {
+            TextColor = IsHovered ? HoveringTextColor : InitialTextColor;
         }
 
         public override void Draw(SpriteBatch spriteBatch, Screen screen)
         {
-            if (IsHovering)
+            if (IsPressed && !_pressing)
+            {
+                OnPress();
+                _pressing = true;
+            }
+            else if (IsHovered && !_hovering)
+            {
                 OnHover();
+                _hovering = true;
+            }
             else
-                OnLeave();
+            {
+                if (!IsPressed && _pressing)
+                {
+                    OnRelease();
+                    _pressing = false;
+                }
+
+                if (!IsHovered && _hovering)
+                {
+                    OnLeave();
+                    _hovering = false;
+                }
+                
+            }
+                
+            
 
             var coordinates = Position.GetCoordinate(screen, Width, Height);
 
@@ -69,7 +106,7 @@ namespace Architecture.Entities
 
         public override void Update(GameTime gameTime, Screen screen)
         {
-            IsHovering = CheckIntersection(screen);
+            IsHovered = CheckIntersection(screen);
         }
     }
 }

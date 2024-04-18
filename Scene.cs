@@ -28,5 +28,13 @@ namespace Architecture
             spriteBatch.Draw(Background, new Rectangle(0, 0, screen.Width, screen.Height), Color.White);
             ButtonManager.DrawEntities(spriteBatch, screen);
         }
+
+        public virtual void ButtonPress() =>
+            ButtonManager.OnButtonPress();
+        
+
+        public virtual void ButtonRelease() =>
+            ButtonManager.OnButtonRelease();
+        
     }
 }

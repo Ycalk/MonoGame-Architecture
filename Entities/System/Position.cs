@@ -6,10 +6,14 @@
         Percents
     }
 
-    public struct Position
+    public class Position
     {
         private readonly Point _coordinates;
         public PositionType Type { get; private set; }
+
+        public Point? LastCoordinates { get; private set; }
+
+        public Position(Point p, PositionType type):this(p.X, p.Y, type) { }
 
         public Position(int x, int y, PositionType type)
         {
@@ -37,9 +41,11 @@
             int objectWidth, int objectHeight)
         {
             if (Type == PositionType.Pixels)
-                return _coordinates;
-            return new Point((screenWidth - objectWidth) * _coordinates.X / 100, 
-                (screenHeight - objectHeight) * _coordinates.Y / 100);
+                LastCoordinates = _coordinates;
+            else
+                LastCoordinates = new Point((screenWidth - objectWidth) * _coordinates.X / 100,
+                    (screenHeight - objectHeight) * _coordinates.Y / 100);
+            return LastCoordinates;
         }
 
     }
