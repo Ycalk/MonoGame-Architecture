@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Architecture.Entities.System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Architecture.Entities
@@ -7,7 +8,7 @@ namespace Architecture.Entities
     {
         public bool IsVisible { get; protected set; }
         protected Position Position;
-        protected Sprite.Sprite? Sprite;
+        protected Sprite? Sprite;
         protected int Width;
         protected int Height;
         public int DrawOrder { get; }
@@ -21,7 +22,7 @@ namespace Architecture.Entities
             IsVisible = true;
         }
 
-        protected Entity(Position position, int width, int height, int drawOrder, Sprite.Sprite sprite) :
+        protected Entity(Position position, int width, int height, int drawOrder, Sprite sprite) :
             this(position, width, height, drawOrder)
         {
             Sprite = sprite;

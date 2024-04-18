@@ -8,7 +8,7 @@ namespace Architecture
 {
     public class Scene
     {
-        Texture2D Background { get; }
+        protected Texture2D Background;
 
         protected readonly ButtonManager ButtonManager;
 
