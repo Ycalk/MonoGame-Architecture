@@ -8,10 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Architecture._3D
 {
-    public class Scene : Architecture.Scene
+    public class Scene
     {
-        public Scene(IEnumerable<Button> buttons, Texture2D background) : base(buttons, background)
-        {
-        }
+        
     }
 }

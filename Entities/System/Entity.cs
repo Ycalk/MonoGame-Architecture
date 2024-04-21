@@ -1,8 +1,7 @@
-﻿using Architecture.Entities.System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Architecture.Entities
+namespace Architecture.Entities.System
 {
     public abstract class Entity : IGameEntity
     {
@@ -13,9 +12,9 @@ namespace Architecture.Entities
         protected int Height;
         public int DrawOrder { get; }
 
-        protected Entity(Position positionInPixels, int width, int height, int drawOrder)
+        protected Entity(Position position, int width, int height, int drawOrder)
         {
-            Position = positionInPixels;
+            Position = position;
             Width = width;
             Height = height;
             DrawOrder = drawOrder;
@@ -28,8 +27,12 @@ namespace Architecture.Entities
             Sprite = sprite;
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Screen screen) =>
-            Sprite?.Draw(spriteBatch, Position.GetCoordinate(screen, Width, Height));
+        public virtual void Draw(SpriteBatch spriteBatch, Screen screen)
+        {
+            if (IsVisible)
+                Sprite?.Draw(spriteBatch, Position.GetCoordinate(screen, Width, Height));
+        }
+
 
         public virtual void Update(GameTime gameTime, Screen screen)
         {

@@ -1,4 +1,5 @@
 ﻿using Architecture.Entities;
+using Architecture.Managers.System;
 using Microsoft.Xna.Framework;
 
 namespace Architecture.Managers

@@ -1,10 +1,10 @@
-﻿using Architecture.Entities;
+﻿using Architecture.Entities.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Architecture.Managers
+namespace Architecture.Managers.System
 {
-    public class Manager : IManager
+    public abstract class Manager : IManager
     {
         protected readonly List<IGameEntity> Entities = new();
         protected readonly List<IGameEntity> EntitiesToAdd = new();
@@ -21,7 +21,6 @@ namespace Architecture.Managers
 
         public virtual void Manage(GameTime gameTime, Screen screen)
         {
-
             foreach (var entity in Entities)
                 entity.Update(gameTime, screen);
             foreach (var entity in EntitiesToAdd)

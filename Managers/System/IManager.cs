@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Architecture.Managers
+namespace Architecture.Managers.System
 {
-    public interface IManager
+    internal interface IManager
     {
         void Manage(GameTime gameTime, Screen screen);
     }

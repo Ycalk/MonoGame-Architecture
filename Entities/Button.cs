@@ -61,6 +61,8 @@ namespace Architecture.Entities
 
         public override void Draw(SpriteBatch spriteBatch, Screen screen)
         {
+            base.Draw(spriteBatch, screen);
+
             if (IsPressed && !_pressing)
             {
                 OnPress();
@@ -86,12 +88,8 @@ namespace Architecture.Entities
                 }
                 
             }
-                
-            
 
             var coordinates = Position.GetCoordinate(screen, Width, Height);
-
-            Sprite?.Draw(spriteBatch, coordinates);
 
             if (string.IsNullOrEmpty(Text)) return;
 
