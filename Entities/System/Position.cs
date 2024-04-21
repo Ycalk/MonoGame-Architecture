@@ -1,4 +1,6 @@
-﻿namespace Architecture
+﻿using Microsoft.Xna.Framework;
+
+namespace Architecture.Entities.System
 {
     public enum PositionType
     {
@@ -8,14 +10,14 @@
 
     public class Position
     {
-        private readonly Point _coordinates;
-        public PositionType Type { get; private set; }
+        private readonly Vector2 _coordinates;
+        public PositionType Type { get; }
 
-        public Point? LastCoordinates { get; private set; }
+        public Vector2 LastCoordinates { get; private set; }
 
-        public Position(Point p, PositionType type):this(p.X, p.Y, type) { }
+        public Position(Vector2 p, PositionType type) : this(p.X, p.Y, type) { }
 
-        public Position(int x, int y, PositionType type)
+        public Position(float x, float y, PositionType type)
         {
             if (type == PositionType.Percents)
             {
@@ -31,19 +33,19 @@
             {
                 Type = PositionType.Pixels;
             }
-            _coordinates = new Point(x, y);
+            _coordinates = new Vector2(x, y);
         }
 
-        public Point GetCoordinate(Screen screen, int width, int height) => 
+        public Vector2 GetCoordinate(Screen screen, int width, int height) =>
             GetCoordinate(screen.Width, screen.Height, width, height);
 
-        public Point GetCoordinate(int screenWidth, int screenHeight, 
+        public Vector2 GetCoordinate(int screenWidth, int screenHeight,
             int objectWidth, int objectHeight)
         {
             if (Type == PositionType.Pixels)
                 LastCoordinates = _coordinates;
             else
-                LastCoordinates = new Point((screenWidth - objectWidth) * _coordinates.X / 100,
+                LastCoordinates = new Vector2((screenWidth - objectWidth) * _coordinates.X / 100,
                     (screenHeight - objectHeight) * _coordinates.Y / 100);
             return LastCoordinates;
         }

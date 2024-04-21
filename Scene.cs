@@ -2,7 +2,6 @@
 using Architecture.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Point = Architecture.Point;
 
 namespace Architecture
 {

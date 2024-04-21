@@ -1,13 +1,16 @@
-﻿namespace Architecture
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+
+namespace Architecture
 {
     public readonly struct Screen 
     {
         public int Width { get; }
         public int Height { get; }
 
-        public Point MousePosition { get; }
+        public Vector2 MousePosition { get; }
 
-        public Screen(int width, int height, Point mousePosition)
+        public Screen(int width, int height, Vector2 mousePosition)
         {
             Width = width;
             Height = height;
@@ -15,7 +18,7 @@
         }
 
         public Screen(int width, int height, int mouseX, int mouseY) : 
-            this(width, height, new Point(mouseX, mouseY))
+            this(width, height, new Vector2(mouseX, mouseY))
         { }
 
         public override bool Equals(object? obj)

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Architecture.Sprite
+namespace Architecture.Entities.System
 {
     public class Sprite
     {
@@ -60,8 +60,8 @@ namespace Architecture.Sprite
             return texture;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Point positionInPixels) =>
-            spriteBatch.Draw(Texture, new Rectangle(positionInPixels.X, positionInPixels.Y, Width, Height), Color.White);
+        public void Draw(SpriteBatch spriteBatch, Vector2 positionInPixels) =>
+            spriteBatch.Draw(Texture, new Rectangle((int)positionInPixels.X, (int)positionInPixels.Y, Width, Height), Color.White);
 
     }
 }
