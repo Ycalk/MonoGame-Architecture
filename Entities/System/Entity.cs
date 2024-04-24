@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Architecture.Entities.System
 {
-    public abstract class Entity : IGameEntity
+    public abstract class Entity
     {
         public bool IsVisible { get; protected set; }
         protected Position Position;
@@ -26,16 +26,15 @@ namespace Architecture.Entities.System
         {
             Sprite = sprite;
         }
-
-        public virtual void Draw(SpriteBatch spriteBatch, Screen screen)
+        internal virtual void Draw(SpriteBatch spriteBatch, Screen screen)
         {
             if (IsVisible)
                 Sprite?.Draw(spriteBatch, Position.GetCoordinate(screen, Width, Height));
         }
 
-
-        public virtual void Update(GameTime gameTime, Screen screen)
+        internal virtual void Update(GameTime gameTime, Screen screen)
         {
         }
+
     }
 }

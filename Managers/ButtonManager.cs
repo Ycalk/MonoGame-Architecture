@@ -26,7 +26,8 @@ namespace Architecture.Managers
             }
             else
             {
-                foreach (var button in Entities.Cast<Button>().Where(button => button.CheckIntersection(screen)))
+                foreach (var button in Entities.Cast<Button>()
+                             .Where(button => button.CheckIntersection(screen)))
                     button.IsPressed = true;
             }
         }

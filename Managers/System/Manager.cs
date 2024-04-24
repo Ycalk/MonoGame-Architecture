@@ -6,16 +6,16 @@ namespace Architecture.Managers.System
 {
     public abstract class Manager : IManager
     {
-        protected readonly List<IGameEntity> Entities = new();
-        protected readonly List<IGameEntity> EntitiesToAdd = new();
-        protected readonly List<IGameEntity> EntitiesToRemove = new();
+        protected readonly List<Entity> Entities = new();
+        protected readonly List<Entity> EntitiesToAdd = new();
+        protected readonly List<Entity> EntitiesToRemove = new();
 
 
-        public void Add(IGameEntity entity) =>
+        public void Add(Entity entity) =>
             EntitiesToAdd.Add(
                 entity ?? throw new ArgumentNullException(nameof(entity), "Null entity cannot be added"));
 
-        public void Remove(IGameEntity entity) =>
+        public void Remove(Entity entity) =>
             EntitiesToRemove.Add(
                 entity ?? throw new ArgumentNullException(nameof(entity), "Null entity cannot be removed"));
 

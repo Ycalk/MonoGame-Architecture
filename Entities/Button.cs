@@ -8,14 +8,14 @@ namespace Architecture.Entities
     {
         protected string Text;
         protected Color TextColor;
-
         protected readonly Color InitialTextColor;
+
         protected Color HoveringTextColor = Color.Blue;
         protected Color PressingTextColor = Color.Red;
 
-        public bool IsPressed;
-        protected bool IsHovered;
-        
+        public bool IsPressed { get; internal set; }
+        public bool IsHovered { get; protected set; }
+
         private bool _hovering;
         private bool _pressing;
         protected SpriteFont Font;
@@ -39,30 +39,46 @@ namespace Architecture.Entities
             Text = text;
         }
 
-        public virtual void OnHover()
+        protected virtual void OnHover()
         {
             TextColor = HoveringTextColor;
         }
 
-        public virtual void OnLeave()
+        protected virtual void OnLeave()
         {
             TextColor = InitialTextColor;
         }
 
-        public virtual void OnPress()
+        protected virtual void OnPress()
         {
             TextColor = PressingTextColor;
         }
 
-        public virtual void OnRelease()
+        protected virtual void OnRelease()
         {
             TextColor = IsHovered ? HoveringTextColor : InitialTextColor;
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Screen screen)
+        internal override void Draw(SpriteBatch spriteBatch, Screen screen)
         {
             base.Draw(spriteBatch, screen);
 
+            var coordinates = Position.GetCoordinate(screen, Width, Height);
+
+            if (string.IsNullOrEmpty(Text)) return;
+
+            var x = (coordinates.X + (float)Width / 2) - (Font.MeasureString(Text).X / 2);
+            var y = (coordinates.Y + (float)Height / 2) - (Font.MeasureString(Text).Y / 2);
+
+            spriteBatch.DrawString(Font, Text, new Vector2(x, y), TextColor);
+        }
+
+        public bool CheckIntersection(Screen screen) => 
+            new Rectangle((int)screen.MousePosition.X, (int)screen.MousePosition.Y, 1, 1).Intersects(ButtonRectangle(screen));
+
+        internal override void Update(GameTime gameTime, Screen screen)
+        {
+            IsHovered = CheckIntersection(screen);
             if (IsPressed && !_pressing)
             {
                 OnPress();
@@ -80,32 +96,12 @@ namespace Architecture.Entities
                     OnRelease();
                     _pressing = false;
                 }
-
-                if (!IsHovered && _hovering)
-                {
-                    OnLeave();
-                    _hovering = false;
-                }
-                
+                if (IsHovered || !_hovering) return;
+                OnLeave();
+                _hovering = false;
             }
-
-            var coordinates = Position.GetCoordinate(screen, Width, Height);
-
-            if (string.IsNullOrEmpty(Text)) return;
-
-            var x = (coordinates.X + (float)Width / 2) - (Font.MeasureString(Text).X / 2);
-            var y = (coordinates.Y + (float)Height / 2) - (Font.MeasureString(Text).Y / 2);
-
-            spriteBatch.DrawString(Font, Text, new Vector2(x, y), TextColor);
         }
-
-        public bool CheckIntersection(Screen screen) => 
-            new Rectangle((int)screen.MousePosition.X, (int)screen.MousePosition.Y, 1, 1).Intersects(ButtonRectangle(screen));
-
-
-        public override void Update(GameTime gameTime, Screen screen)
-        {
-            IsHovered = CheckIntersection(screen);
-        }
+            
+        
     }
 }

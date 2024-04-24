@@ -27,6 +27,7 @@ namespace Architecture.Entities
         {
             _font = font;
             _textOnUpdate = value;
+            _text = value;
             TextColor = textColor;
             UpdateText();
         }
@@ -39,7 +40,7 @@ namespace Architecture.Entities
             Height = (int) height;
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Screen screen)
+        internal override void Draw(SpriteBatch spriteBatch, Screen screen)
         {
             if (_textOnUpdate != _text)
                 UpdateText();
