@@ -18,6 +18,10 @@ namespace Architecture.Managers
         protected readonly List<Cube> Cubes = new();
         protected readonly List<Cube> CubesToAdd = new();
         protected readonly List<Cube> CubesToRemove = new();
+
+        protected readonly List<Cube> IgnoringCubes = new();
+        protected readonly List<Cube> CubesToIgnore = new();
+
         private readonly Camera _camera;
         private bool _press;
 
@@ -28,6 +32,10 @@ namespace Architecture.Managers
         public void Remove(Cube cube) =>
             CubesToAdd.Add(
                 cube ?? throw new ArgumentNullException(nameof(cube), "Null cube cannot be removed"));
+
+        public void AddIgnoringCube(Cube cube) =>
+            CubesToIgnore.Add(
+                cube ?? throw new ArgumentNullException(nameof(cube), "Null cube cannot be ignoring"));
 
         public CubeManager(GraphicsDevice graphics, IEnumerable<Cube> cubes, CameraStartPosition startPositionX)
         {
@@ -43,12 +51,15 @@ namespace Architecture.Managers
         public void OnLeftArrowPress() => RotateCamera(MathHelper.ToRadians(-1));
         public void OnRightArrowPress() => RotateCamera(MathHelper.ToRadians(1));
 
+        
+
         public void Manage(GameTime gameTime, Screen screen)
         {
             foreach (var cube in Cubes)
             {
-                cube.IsHovered = cube.CheckIntersection(screen, _camera) &&
-                                 (Cubes.All(c => !c.IsHovered) || cube.IsHovered);
+                cube.IsHovered = !IgnoringCubes.Contains(cube) && 
+                                 cube.CheckIntersection(screen, _camera) &&
+                                 (cube.IsHovered || Cubes.All(c => !c.IsHovered)) ;
                 cube.IsPressed = cube.IsHovered && _press;
                 cube.Update(screen, _camera);
             }
@@ -59,6 +70,10 @@ namespace Architecture.Managers
             foreach (var cube in CubesToRemove)
                 Cubes.Remove(cube);
 
+            foreach (var cube in CubesToIgnore)
+                IgnoringCubes.Add(cube);
+
+            CubesToIgnore.Clear();
             CubesToAdd.Clear();
             CubesToRemove.Clear();
         }

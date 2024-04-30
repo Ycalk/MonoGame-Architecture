@@ -6,18 +6,18 @@ namespace Architecture.Managers.System
 {
     public abstract class Manager : IManager
     {
-        protected readonly List<Entity> Entities = new();
-        protected readonly List<Entity> EntitiesToAdd = new();
-        protected readonly List<Entity> EntitiesToRemove = new();
+        protected readonly List<Entity2D> Entities = new();
+        protected readonly List<Entity2D> EntitiesToAdd = new();
+        protected readonly List<Entity2D> EntitiesToRemove = new();
 
 
-        public void Add(Entity entity) =>
+        public void Add(Entity2D entity2D) =>
             EntitiesToAdd.Add(
-                entity ?? throw new ArgumentNullException(nameof(entity), "Null entity cannot be added"));
+                entity2D ?? throw new ArgumentNullException(nameof(entity2D), "Null entity2D cannot be added"));
 
-        public void Remove(Entity entity) =>
+        public void Remove(Entity2D entity2D) =>
             EntitiesToRemove.Add(
-                entity ?? throw new ArgumentNullException(nameof(entity), "Null entity cannot be removed"));
+                entity2D ?? throw new ArgumentNullException(nameof(entity2D), "Null entity2D cannot be removed"));
 
         public virtual void Manage(GameTime gameTime, Screen screen)
         {

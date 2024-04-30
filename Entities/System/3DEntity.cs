@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Architecture.Entities.System
 {
-    public abstract class _3DEntity
+    public abstract class Entity3D : Entity
     {
         public Matrix World { get; protected set; }
         public Model Model { get; protected set; }
         public Color Color { get; protected set; } 
-        protected _3DEntity(Matrix world, Model model, Color color)
+        protected Entity3D(Matrix world, Model model, Color color)
         {
             World = world;
             Model = model;

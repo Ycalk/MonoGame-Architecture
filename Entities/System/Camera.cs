@@ -42,13 +42,13 @@ namespace Architecture.Entities.System
             View = Matrix.CreateLookAt(Position, Target, Vector3.Up);
         }
 
-        public void Draw(IEnumerable<_3DEntity> entities)
+        public void Draw(IEnumerable<Entity3D> entities)
         {
             foreach (var obj in entities)
                 DrawObject(obj);
         }
 
-        private void DrawObject(_3DEntity obj)
+        private void DrawObject(Entity3D obj)
         {
             foreach (var mesh in obj.Model.Meshes)
             {

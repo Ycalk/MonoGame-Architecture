@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Architecture.Entities
 {
-    public class Button : Entity
+    public class Button : Entity2D
     {
         protected string Text;
         protected Color TextColor;

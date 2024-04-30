@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Architecture.Entities
 {
-    public class Text : Entity
+    public class Text : Entity2D
     {
         public string Value
         {
