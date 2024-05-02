@@ -21,6 +21,7 @@ namespace Architecture.Managers
 
         protected readonly List<Cube> IgnoringCubes = new();
         protected readonly List<Cube> CubesToIgnore = new();
+        protected readonly List<Cube> CubesToDisableIgnore = new();
 
         private readonly Camera _camera;
         private bool _press;
@@ -33,8 +34,12 @@ namespace Architecture.Managers
             CubesToAdd.Add(
                 cube ?? throw new ArgumentNullException(nameof(cube), "Null cube cannot be removed"));
 
-        public void AddIgnoringCube(Cube cube) =>
+        public void Ignore(Cube cube) =>
             CubesToIgnore.Add(
+                cube ?? throw new ArgumentNullException(nameof(cube), "Null cube cannot be ignoring"));
+
+        public void DisableIgnore(Cube cube) =>
+            CubesToDisableIgnore.Add(
                 cube ?? throw new ArgumentNullException(nameof(cube), "Null cube cannot be ignoring"));
 
         public CubeManager(GraphicsDevice graphics, IEnumerable<Cube> cubes, CameraStartPosition startPositionX)
@@ -70,12 +75,17 @@ namespace Architecture.Managers
             foreach (var cube in CubesToRemove)
                 Cubes.Remove(cube);
 
+
             foreach (var cube in CubesToIgnore)
                 IgnoringCubes.Add(cube);
+
+            foreach (var cube in CubesToDisableIgnore)
+                IgnoringCubes.Remove(cube);
 
             CubesToIgnore.Clear();
             CubesToAdd.Clear();
             CubesToRemove.Clear();
+            CubesToDisableIgnore.Clear();
         }
 
         public void RotateCamera(float angleInRadians) => _camera.Rotate(angleInRadians);

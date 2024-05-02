@@ -16,6 +16,12 @@ namespace Architecture.Managers
         public void OnButtonPress() => _press = true;
         public void OnButtonRelease() => _press = false;
 
+        public void Ignore(Button button) =>
+            Entities.Cast<Button>().First(b => b == button).Ignoring = true;
+
+        public void DisableIgnore(Button button) =>
+            Entities.Cast<Button>().First(b => b == button).Ignoring = false;
+
         public override void Manage(GameTime gameTime, Screen screen)
         {
             base.Manage(gameTime, screen);

@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Architecture.Entities
 {
-    public class Button : Entity2D
+    public class Button : Entity2D, IInteractive
     {
         protected string Text;
         protected Color TextColor;
         protected readonly Color InitialTextColor;
+        internal bool Ignoring;
 
         protected Color HoveringTextColor = Color.Blue;
         protected Color PressingTextColor = Color.Red;
@@ -79,6 +80,7 @@ namespace Architecture.Entities
         internal override void Update(GameTime gameTime, Screen screen)
         {
             IsHovered = CheckIntersection(screen);
+            if (Ignoring) return;
             if (IsPressed && !_pressing)
             {
                 OnPress();
@@ -101,7 +103,5 @@ namespace Architecture.Entities
                 _hovering = false;
             }
         }
-            
-        
     }
 }

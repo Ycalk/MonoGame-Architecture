@@ -10,6 +10,7 @@ namespace Architecture.Managers.System
         protected readonly List<Entity2D> EntitiesToAdd = new();
         protected readonly List<Entity2D> EntitiesToRemove = new();
 
+        public IEnumerable<Entity2D> GetEntities() => Entities;
 
         public void Add(Entity2D entity2D) =>
             EntitiesToAdd.Add(

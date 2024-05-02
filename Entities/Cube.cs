@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Architecture.Entities
 {
-    public class Cube : Entity3D
+    public class Cube : Entity3D, IInteractive
     {
         protected static readonly Vector3[] ProjectedVertices = {
             new(-1, 2, 1),
