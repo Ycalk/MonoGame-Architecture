@@ -9,7 +9,6 @@ namespace Architecture
     public class Scene
     {
         protected Texture2D Background;
-        public CameraStartPosition CameraStartPosition { get; protected set; }
         protected readonly ButtonManager ButtonManager;
         protected readonly ImageManager ImageManager;
         protected readonly TextManager TextManager;
@@ -36,17 +35,16 @@ namespace Architecture
             IEnumerable<Image> images, 
             IEnumerable<Text> texts, 
             IEnumerable<Cube> cubes,
-            CameraStartPosition startPosition,
+            float distancing,
             GraphicsDevice graphics,
             Texture2D background)
         {
-            CameraStartPosition = startPosition;
             Graphics = graphics;
 
             ButtonManager = new ButtonManager(buttons);
             ImageManager = new ImageManager(images);
             TextManager = new TextManager(texts);
-            CubeManager = new CubeManager(graphics, cubes, startPosition);
+            CubeManager = new CubeManager(graphics, cubes, distancing);
             Background = background;
         }
 
@@ -56,7 +54,7 @@ namespace Architecture
             IEnumerable<Cube> cubes,
             GraphicsDevice graphics,
             Texture2D background)
-            : this(buttons, images, texts, cubes, CameraStartPosition.Thirty, graphics, background) {}
+            : this(buttons, images, texts, cubes, 30, graphics, background) {}
             
 
         public virtual void Update(GameTime gameTime, Screen screen)

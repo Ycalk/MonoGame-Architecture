@@ -42,10 +42,10 @@ namespace Architecture.Managers
             CubesToDisableIgnore.Add(
                 cube ?? throw new ArgumentNullException(nameof(cube), "Null cube cannot be ignoring"));
 
-        public CubeManager(GraphicsDevice graphics, IEnumerable<Cube> cubes, CameraStartPosition startPositionX)
+        public CubeManager(GraphicsDevice graphics, IEnumerable<Cube> cubes, float distancing)
         {
             _camera = new Camera(graphics.Viewport.AspectRatio,
-                startPositionX, MathHelper.ToRadians(60), new Vector3(0, 5, 0));
+                distancing, MathHelper.ToRadians(60), new Vector3(0, 5, 0));
             foreach (var el in cubes)
                 Add(el);
         }

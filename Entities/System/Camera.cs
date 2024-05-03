@@ -3,35 +3,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Architecture.Entities.System
 {
-    public enum CameraStartPosition
-    {
-        Twenty = 20,
-        Thirty = 30,
-        Forty = 40,
-        Fifty = 50,
-        Sixty = 60,
-        Seventy = 70,
-        Eighty = 80,
-    }
-
     internal class Camera
     {
-        public CameraStartPosition StartPosition { get; }
         public Vector3 Position { get; private set; }
         public readonly Vector3 Target;
         public Matrix View { get; private set; }
         public readonly Matrix Projection;
 
-        public Camera(float aspectRatio, CameraStartPosition startPositionX, float angel, Vector3 target)
+        public Camera(float aspectRatio, float distancing, float angel, Vector3 target)
         {
             Target = target;
-            StartPosition = startPositionX;
 
             Projection = Matrix.CreatePerspectiveFieldOfView(
                 angel, aspectRatio, 1, 1000);
-            Position = new Vector3((int)startPositionX, 0, 0);
+
+            Position = new Vector3(distancing, 0, 0);
             var rotationMatrix = Matrix.CreateRotationZ(angel);
             Position = Vector3.Transform(Position, rotationMatrix);
+
             View = Matrix.CreateLookAt(Position, Target, Vector3.Up);
         }
 

@@ -7,11 +7,11 @@ namespace Architecture.Entities
 {
     public class Cube : Entity3D, IInteractive
     {
-        protected static readonly Vector3[] ProjectedVertices = {
-            new(-1, 2, 1),
-            new(-1, 2, -1),
-            new(1, 2, -1),
-            new(1, 2, 1),
+        protected static readonly Vector3[] VerticesInLocalCoordinates = {
+            new(-1, 1, 1),
+            new(-1, 1, -1),
+            new(1, 1, -1),
+            new(1, 1, 1),
         };
 
         protected Color HoveringColor = Color.Gray;
@@ -24,35 +24,23 @@ namespace Architecture.Entities
         private bool _pressing;
 
 
-        // Magic starts here
-        private readonly Dictionary<CameraStartPosition, float> _offsets = new()
-        {
-            [CameraStartPosition.Twenty] = 42,
-            [CameraStartPosition.Thirty] = 22,
-            [CameraStartPosition.Forty] = 15,
-            [CameraStartPosition.Fifty] = 11,
-            [CameraStartPosition.Sixty] = 9,
-            [CameraStartPosition.Seventy] = 9,
-            [CameraStartPosition.Eighty] = 7,
-        };
-
         private Vector2 ConvertIntoTwoDimensions(Vector3 vector,
-            Matrix view, Matrix projection, Vector3 cameraPosition, CameraStartPosition position,
+            Matrix view, Matrix projection,
             int windowWidth, int windowHeight)
         {
-            var projected = Vector3.Transform(vector, view * projection);
-            var windowScale = (float)Math.Sqrt(
-                cameraPosition.X * cameraPosition.X +
-                cameraPosition.Y * cameraPosition.Y +
-                cameraPosition.Z * cameraPosition.Z) * 2;
-            return new Vector2(
-                projected.X * windowWidth / windowScale +
-                (float)windowWidth / 2 - 2,
+            var vertexInWorldCoordinates = Vector3.Transform(vector, World);
 
-                -projected.Y * windowHeight / windowScale +
-                (float)windowHeight / 2 + _offsets[position]);
+            var projected = Vector3.Transform(vertexInWorldCoordinates, view * projection);
+
+            var screenPosition = new Vector2(
+                projected.X / projected.Z,
+                projected.Y / projected.Z
+            );
+
+            screenPosition.X = (screenPosition.X + 1) * windowWidth / 2;
+            screenPosition.Y = (1 - screenPosition.Y) * windowHeight / 2;
+            return screenPosition;
         }
-        // Magic ends here
 
         public virtual void OnHover()
         {
@@ -92,8 +80,8 @@ namespace Architecture.Entities
             for (var i = 0; i < 4; i++)
             {
                 points[i] = ConvertIntoTwoDimensions(
-                    ProjectedVertices[i] + World.Translation,
-                    camera.View, camera.Projection, camera.Position, camera.StartPosition,
+                    VerticesInLocalCoordinates[i],
+                    camera.View, camera.Projection,
                     screen.Width, screen.Height);
             }
             return CheckIntersection(points);
