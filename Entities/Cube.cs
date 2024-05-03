@@ -103,7 +103,8 @@ namespace Architecture.Entities
             {
                 if (!IsPressed && _pressing)
                 {
-                    OnRelease();
+                    if (CheckIntersection(screen, camera))
+                        OnRelease();
                     _pressing = false;
                 }
                 if (IsHovered || !_hovering) return;
