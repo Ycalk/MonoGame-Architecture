@@ -62,6 +62,14 @@ namespace Architecture.Entities
             Color = IsHovered ? HoveringColor : Color.White;
         }
 
+        public void SetAlfa(float alfa)
+        {
+            if (alfa is < 0 or > 1)
+                throw new ArgumentOutOfRangeException(nameof(alfa), "Alfa must be between 0 and 1");
+            Alfa = alfa;
+        }
+            
+
         private static bool CheckIntersection(Vector2[] points)
         {
             var minX = points.Min(p => p.X);
