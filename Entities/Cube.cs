@@ -113,6 +113,9 @@ namespace Architecture.Entities
             }
         }
 
+        public Cube(Vector3 position, Model model, Texture2D texture)
+            : base(Matrix.CreateWorld(position, Vector3.Forward, Vector3.Up), model, texture) {} 
+
         public Cube(Vector3 position, Model model)
             : base(Matrix.CreateWorld(position, Vector3.Forward, Vector3.Up), model, Color.White) {}
 

@@ -13,11 +13,22 @@ namespace Architecture.Entities.System
         public Matrix World { get; protected set; }
         public Model Model { get; protected set; }
         public Color Color { get; protected set; } 
+        public Texture2D? Texture { get; protected set; }
+        public float Alfa { get; protected set; } = 1f;
+
         protected Entity3D(Matrix world, Model model, Color color)
         {
             World = world;
             Model = model;
             Color = color;
+        }
+
+        protected Entity3D(Matrix world, Model model, Texture2D effectTexture)
+        {
+            World = world;
+            Model = model;
+            Color = Color.White;
+            Texture = effectTexture;
         }
 
         internal virtual void Update(Screen screen, Camera camera) {}
@@ -32,6 +43,17 @@ namespace Architecture.Entities.System
                     effect.Projection = camera.Projection;
                     effect.World = World;
                     effect.DiffuseColor = Color.ToVector3();
+
+                    effect.PreferPerPixelLighting = true;
+                    effect.EnableDefaultLighting();
+                    
+                    effect.Alpha = Alfa;
+                    
+                    if (Texture is not null)
+                    {
+                        effect.TextureEnabled = true;
+                        effect.Texture = Texture;
+                    }
                 }
                 mesh.Draw();
             }
