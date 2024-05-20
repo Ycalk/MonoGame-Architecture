@@ -66,7 +66,7 @@ namespace Architecture.Managers
                                  cube.CheckIntersection(screen, _camera) &&
                                  (cube.IsHovered || Cubes.All(c => !c.IsHovered)) ;
                 cube.IsPressed = cube.IsHovered && _press;
-                cube.Update(screen, _camera);
+                cube.Update(screen, _camera, gameTime);
             }
             
             foreach (var cube in CubesToAdd)

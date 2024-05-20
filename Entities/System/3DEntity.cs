@@ -15,6 +15,7 @@ namespace Architecture.Entities.System
         public Color Color { get; protected set; } 
         public Texture2D? Texture { get; protected set; }
         public float Alfa { get; protected set; } = 1f;
+        public Vector3 Position => World.Translation;
 
         protected Entity3D(Matrix world, Model model, Color color)
         {
@@ -31,7 +32,7 @@ namespace Architecture.Entities.System
             Texture = effectTexture;
         }
 
-        internal virtual void Update(Screen screen, Camera camera) {}
+        internal virtual void Update(Screen screen, Camera camera, GameTime gameTime) {}
 
         internal virtual void Draw(Camera camera)
         {

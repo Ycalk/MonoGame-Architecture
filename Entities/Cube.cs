@@ -23,6 +23,14 @@ namespace Architecture.Entities
         private bool _hovering;
         private bool _pressing;
 
+        private Vector3 _startPosition;
+        private Vector3 _endPosition;
+        private float _currentMovingTime;
+        private float _totalMovingTime;
+        private bool _isMoving;
+
+        private bool _isDisappearing;
+        private float _disappearingTime;
 
         private Vector2 ConvertIntoTwoDimensions(Vector3 vector,
             Matrix view, Matrix projection,
@@ -95,7 +103,38 @@ namespace Architecture.Entities
             return CheckIntersection(points);
         }
 
-        internal override void Update(Screen screen, Camera camera)
+        internal override void Update(Screen screen, Camera camera, GameTime gameTime)
+        {
+            if (_isMoving)
+            {
+                _currentMovingTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_currentMovingTime >= _totalMovingTime)
+                {
+                    World = Matrix.CreateWorld(_endPosition, Vector3.Forward, Vector3.Up);
+                    _isMoving = false;
+                }
+                else
+                {
+                    var newPosition = Vector3.Lerp(_startPosition,
+                        _endPosition, _currentMovingTime / _totalMovingTime);
+                    World = Matrix.CreateWorld(newPosition, Vector3.Forward, Vector3.Up);
+                }
+            }
+
+            if (_isDisappearing)
+            {
+                Alfa -= (float)gameTime.ElapsedGameTime.TotalSeconds / _disappearingTime;
+                if (Alfa <= 0)
+                {
+                    Color = Color.Transparent;
+                    _isDisappearing = false;
+                }
+            }
+
+            InteractiveCheck(screen, camera);
+        }
+
+        private void InteractiveCheck(Screen screen, Camera camera)
         {
             if (IsPressed && !_pressing)
             {
@@ -126,6 +165,21 @@ namespace Architecture.Entities
 
         public Cube(Vector3 position, Model model)
             : base(Matrix.CreateWorld(position, Vector3.Forward, Vector3.Up), model, Color.White) {}
+
+        public void Disappear(float disappearingTime)
+        {
+            _isDisappearing = true;
+            _disappearingTime = disappearingTime;
+        }
+
+        public void MoveTo(Vector3 position, float movingTime)
+        {
+            _startPosition = World.Translation;
+            _endPosition = position;
+            _totalMovingTime = movingTime;
+            _currentMovingTime = 0;
+            _isMoving = true;
+        }
 
         public void MoveTo(Vector3 position) =>
             World = Matrix.CreateWorld(position, Vector3.Forward, Vector3.Up);
