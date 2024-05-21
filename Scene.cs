@@ -8,6 +8,8 @@ namespace Architecture
 {
     public class Scene
     {
+        public IEnumerable<IInteractive> Ignoring => ButtonManager.Ignoring().Cast<IInteractive>().Concat(CubeManager.Ignoring());
+
         protected Texture2D Background;
         protected readonly ButtonManager ButtonManager;
         protected readonly ImageManager ImageManager;
@@ -79,10 +81,10 @@ namespace Architecture
                 spriteBatch.Draw(Background, new Rectangle(0, 0, screen.Width, screen.Height), Color.White);
             else
                 Graphics.Clear(Color.White);
-            ButtonManager.DrawEntities(spriteBatch, screen);
-            ImageManager.DrawEntities(spriteBatch, screen);
-            TextManager.DrawEntities(spriteBatch, screen);
             CubeManager.DrawCubes();
+            ImageManager.DrawEntities(spriteBatch, screen);
+            ButtonManager.DrawEntities(spriteBatch, screen);
+            TextManager.DrawEntities(spriteBatch, screen);
         }
 
         public virtual void Add(Entity entity)
@@ -147,16 +149,6 @@ namespace Architecture
                     CubeManager.DisableIgnore(cube);
                     break;
             }
-        }
-
-        public IEnumerable<T> Ignoring<T>()
-        {
-            var type = typeof(T);
-            if (type == typeof(Button))
-                return ButtonManager.Ignoring().Cast<T>();
-            if (type == typeof(Cube))
-                return CubeManager.Ignoring().Cast<T>();
-            throw new ArgumentException("Invalid type");
         }
 
         public virtual IEnumerable<T> GetEntities<T>()
