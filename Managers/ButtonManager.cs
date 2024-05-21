@@ -22,6 +22,9 @@ namespace Architecture.Managers
         public void DisableIgnore(Button button) =>
             Entities.Cast<Button>().First(b => b == button).Ignoring = false;
 
+        public IEnumerable<Button> Ignoring() =>
+            Entities.Cast<Button>().Where(b => b.Ignoring);
+
         public override void Manage(GameTime gameTime, Screen screen)
         {
             base.Manage(gameTime, screen);

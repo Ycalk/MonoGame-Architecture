@@ -42,6 +42,8 @@ namespace Architecture.Managers
             CubesToDisableIgnore.Add(
                 cube ?? throw new ArgumentNullException(nameof(cube), "Null cube cannot be ignoring"));
 
+        public IEnumerable<Cube> Ignoring() => IgnoringCubes;
+
         public CubeManager(GraphicsDevice graphics, IEnumerable<Cube> cubes, float distancing)
         {
             _camera = new Camera(graphics.Viewport.AspectRatio,

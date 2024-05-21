@@ -149,6 +149,16 @@ namespace Architecture
             }
         }
 
+        public IEnumerable<T> Ignoring<T>()
+        {
+            var type = typeof(T);
+            if (type == typeof(Button))
+                return ButtonManager.Ignoring().Cast<T>();
+            if (type == typeof(Cube))
+                return CubeManager.Ignoring().Cast<T>();
+            throw new ArgumentException("Invalid type");
+        }
+
         public virtual IEnumerable<T> GetEntities<T>()
         {
             var type = typeof(T);
