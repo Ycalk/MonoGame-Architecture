@@ -18,6 +18,17 @@ namespace Architecture
         protected readonly GraphicsDevice Graphics;
 
 
+        protected float RotationMaximalSpeed
+        {
+            get => _rotationMaximalSpeed;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), "Rotation speed cannot be negative");
+                _rotationMaximalSpeed = value;
+            }
+        }
+
         protected float RotationSpeed
         {
             get => _rotationSpeed;
@@ -27,9 +38,11 @@ namespace Architecture
                     throw new ArgumentOutOfRangeException(nameof(value), "Rotation speed cannot be negative");
                 _rotationSpeed = value;
             }
-        } 
+        }
 
+        private float _rotationMaximalSpeed = 1.5f;
         private float _rotationSpeed = 1.5f;
+        private float _rotationCurrentSpeed;
         private bool _leftArrowPress;
         private bool _rightArrowPress;
 
@@ -66,10 +79,22 @@ namespace Architecture
             TextManager.Manage(gameTime, screen);
             CubeManager.Manage(gameTime, screen);
 
-            if (_leftArrowPress)
-                CubeManager.RotateCamera(-RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            if (_rightArrowPress)
-                CubeManager.RotateCamera(RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            if (_rightArrowPress || _leftArrowPress)
+            {
+                var direction = _rightArrowPress ? 1 : -1;
+                _rotationCurrentSpeed += direction * _rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (direction * _rotationCurrentSpeed >= _rotationMaximalSpeed)
+                    _rotationCurrentSpeed = direction * _rotationMaximalSpeed;
+            }
+            else
+            {
+                var direction = _rotationCurrentSpeed > 0 ? -1 : 1;
+                _rotationCurrentSpeed += direction * _rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (direction * _rotationCurrentSpeed  >= 0)
+                    _rotationCurrentSpeed = 0;
+            }
+
+            CubeManager.RotateCamera(_rotationCurrentSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             _leftArrowPress = false;
             _rightArrowPress = false;
