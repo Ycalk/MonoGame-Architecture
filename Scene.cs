@@ -3,6 +3,7 @@ using Architecture.Entities.System;
 using Architecture.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Architecture
 {
@@ -40,12 +41,45 @@ namespace Architecture
             }
         }
 
+        protected float ZoomMaximalSpeed
+        {
+            get => _zoomMaximalSpeed;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), "Zoom speed cannot be negative");
+                _zoomMaximalSpeed = value;
+            }
+        }
+
+        protected float ZoomSpeed
+        {
+            get => _zoomSpeed;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), "Zoom speed cannot be negative");
+                _zoomSpeed = value;
+            }
+        }
+
+        public const float MinimalCameraDistancing = 50;
+        public const float MaximalCameraDistancing = 200;
+
         private float _rotationMaximalSpeed = 1.5f;
         private float _rotationSpeed = 1.5f;
         private float _rotationCurrentSpeed;
+
         private bool _leftArrowPress;
         private bool _rightArrowPress;
 
+
+        private float _zoomMaximalSpeed = 1;
+        private float _zoomSpeed = 1.5f;
+        private float _zoomCurrentSpeed;
+
+        private bool _upArrowPress;
+        private bool _downArrowPress;
         public Scene(IEnumerable<Button> buttons, 
             IEnumerable<Image> images, 
             IEnumerable<Text> texts, 
@@ -79,6 +113,12 @@ namespace Architecture
             TextManager.Manage(gameTime, screen);
             CubeManager.Manage(gameTime, screen);
 
+            RotateCamera(gameTime);
+            ZoomCamera(gameTime);
+        }
+
+        private void RotateCamera(GameTime gameTime)
+        {
             if (_rightArrowPress || _leftArrowPress)
             {
                 var direction = _rightArrowPress ? 1 : -1;
@@ -90,7 +130,7 @@ namespace Architecture
             {
                 var direction = _rotationCurrentSpeed > 0 ? -1 : 1;
                 _rotationCurrentSpeed += direction * _rotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (direction * _rotationCurrentSpeed  >= 0)
+                if (direction * _rotationCurrentSpeed >= 0)
                     _rotationCurrentSpeed = 0;
             }
 
@@ -100,12 +140,40 @@ namespace Architecture
             _rightArrowPress = false;
         }
 
+
+        private void ZoomCamera(GameTime gameTime)
+        {
+            if (_upArrowPress && CubeManager.Camera.CurrentDistancing > MinimalCameraDistancing)
+            {
+                _zoomCurrentSpeed += -_zoomSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (-_zoomCurrentSpeed >= _zoomMaximalSpeed)
+                    _zoomCurrentSpeed = -_zoomMaximalSpeed;
+            }
+            else if (_downArrowPress && CubeManager.Camera.CurrentDistancing < MaximalCameraDistancing)
+            {
+                _zoomCurrentSpeed += _zoomSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_zoomCurrentSpeed >= _zoomMaximalSpeed)
+                    _zoomCurrentSpeed = _zoomMaximalSpeed;
+            }
+            else
+            {
+                var direction = _zoomCurrentSpeed > 0 ? -1 : 1;
+                _zoomCurrentSpeed += direction * _zoomSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (direction * _zoomCurrentSpeed >= 0)
+                    _zoomCurrentSpeed = 0;
+            }
+
+            CubeManager.Camera.ChangeDistancing(_zoomCurrentSpeed);
+            _upArrowPress = false;
+            _downArrowPress = false;
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch, Screen screen)
         {
             if (CubeManager.Elements.Count == 0) 
                 spriteBatch.Draw(Background, new Rectangle(0, 0, screen.Width, screen.Height), Color.White);
             else
-                Graphics.Clear(Color.White);
+                 Graphics.Clear(Color.White);
             CubeManager.DrawCubes();
             ImageManager.DrawEntities(spriteBatch, screen);
             ButtonManager.DrawEntities(spriteBatch, screen);
@@ -204,6 +272,7 @@ namespace Architecture
 
         public void LeftArrowPress() => _leftArrowPress = true;
         public void RightArrowPress() => _rightArrowPress = true;
-
+        public void UpArrowPress() => _upArrowPress = true;
+        public void DownArrowPress() => _downArrowPress = true;
     }
 }

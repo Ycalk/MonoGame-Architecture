@@ -24,6 +24,7 @@ namespace Architecture.Managers
         protected readonly List<Cube> CubesToDisableIgnore = new();
 
         private readonly Camera _camera;
+        internal Camera Camera => _camera;
         private bool _press;
 
         public void Add(Cube cube) =>
