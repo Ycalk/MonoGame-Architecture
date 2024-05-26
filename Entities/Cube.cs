@@ -184,17 +184,5 @@ namespace Architecture.Entities
         public void MoveTo(Vector3 position) =>
             World = Matrix.CreateWorld(position, Vector3.Forward, Vector3.Up);
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is null)
-                return false;
-            var other = (Cube)obj;
-            return other.World.Translation == World.Translation;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(World.Translation);
-        }
     }
 }

@@ -70,8 +70,8 @@ namespace Architecture.Entities
 
             var x = (coordinates.X + (float)Width / 2) - (Font.MeasureString(Text).X / 2);
             var y = (coordinates.Y + (float)Height / 2) - (Font.MeasureString(Text).Y / 2);
-
-            spriteBatch.DrawString(Font, Text, new Vector2(x, y), TextColor);
+            if (IsVisible)
+                spriteBatch.DrawString(Font, Text, new Vector2(x, y), TextColor);
         }
 
         public bool CheckIntersection(Screen screen) => 
