@@ -19,7 +19,7 @@ namespace Architecture.Managers
         protected readonly List<Cube> CubesToAdd = new();
         protected readonly List<Cube> CubesToRemove = new();
 
-        protected readonly List<Cube> IgnoringCubes = new();
+        protected readonly HashSet<Cube> IgnoringCubes = new();
         protected readonly List<Cube> CubesToIgnore = new();
         protected readonly List<Cube> CubesToDisableIgnore = new();
 
@@ -59,19 +59,17 @@ namespace Architecture.Managers
         public void OnLeftArrowPress() => RotateCamera(MathHelper.ToRadians(-1));
         public void OnRightArrowPress() => RotateCamera(MathHelper.ToRadians(1));
 
-        
-
         public void Manage(GameTime gameTime, Screen screen)
         {
-            foreach (var cube in Cubes)
+            Parallel.ForEach(Cubes, cube =>
             {
-                cube.IsHovered = !IgnoringCubes.Contains(cube) && 
+                cube.IsHovered = !IgnoringCubes.Contains(cube) &&
                                  cube.CheckIntersection(screen, _camera) &&
-                                 (cube.IsHovered || Cubes.All(c => !c.IsHovered)) ;
+                                 (cube.IsHovered || Cubes.All(c => !c.IsHovered));
                 cube.IsPressed = cube.IsHovered && _press;
                 cube.Update(screen, _camera, gameTime);
-            }
-            
+            });
+
             foreach (var cube in CubesToAdd)
                 Cubes.Add(cube);
 

@@ -39,7 +39,6 @@ namespace Architecture.Entities.System
             newCameraPosition = Vector3.Transform(newCameraPosition, rotationZMatrix);
             newCameraPosition = Vector3.Transform(newCameraPosition, rotationYMatrix);
             Position = newCameraPosition;
-            Debug.WriteLine(Position);
         }
 
         public void Rotate(float angleInRadians)
