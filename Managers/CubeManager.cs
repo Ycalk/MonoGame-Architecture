@@ -61,12 +61,11 @@ namespace Architecture.Managers
 
         public void Manage(GameTime gameTime, Screen screen)
         {
-            var allNotHovered = Cubes.All(c => !c.IsHovered);
             Parallel.ForEach(Cubes, cube =>
             {
                 cube.IsHovered = !IgnoringCubes.Contains(cube) &&
                                  cube.CheckIntersection(screen, _camera) &&
-                                 (cube.IsHovered || allNotHovered);
+                                 (cube.IsHovered || Cubes.All(c => !c.IsHovered));
                 cube.IsPressed = cube.IsHovered && _press;
                 cube.Update(screen, _camera, gameTime);
             });

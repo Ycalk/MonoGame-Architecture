@@ -66,6 +66,9 @@ namespace Architecture
             }
         }
 
+        private float _changeCameraTargetIgnoringTimer;
+
+
         public const float MinimalCameraDistancing = 50;
         public const float MaximalCameraDistancing = 200;
 
@@ -118,6 +121,9 @@ namespace Architecture
 
             RotateCamera(gameTime);
             ZoomCamera(gameTime);
+
+            if (_changeCameraTargetIgnoringTimer > 0)
+                _changeCameraTargetIgnoringTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         private void RotateCamera(GameTime gameTime)
@@ -145,11 +151,15 @@ namespace Architecture
 
         public void ChangeCameraTarget(Vector3 target)
         {
+            if (_changeCameraTargetIgnoringTimer > 0)
+                return;
             CameraDelta += target;
             foreach (var cube in CubeManager.Elements)
             {
+                var movingTime = 0.03f;
                 var point = new Vector3(cube.Position.X - target.X, cube.Position.Y, cube.Position.Z - target.Z);
-                cube.MoveTo(point, 0.03f, true);
+                cube.MoveTo(point, movingTime, true);
+                _changeCameraTargetIgnoringTimer = Math.Max(_changeCameraTargetIgnoringTimer, movingTime * (point - cube.Position).Length());
             }
         }
 

@@ -27,7 +27,6 @@ namespace Architecture.Managers
 
         public override void Manage(GameTime gameTime, Screen screen)
         {
-            base.Manage(gameTime, screen);
             if (!_press)
             {
                 foreach (var button in Entities.Cast<Button>())
@@ -39,6 +38,7 @@ namespace Architecture.Managers
                              .Where(button => button.CheckIntersection(screen)))
                     button.IsPressed = true;
             }
+            base.Manage(gameTime, screen);
         }
 
     }
