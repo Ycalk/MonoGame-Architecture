@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
+using System.Numerics;
+using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace Architecture.Entities.System
 {
@@ -39,8 +41,9 @@ namespace Architecture.Entities.System
             newCameraPosition = Vector3.Transform(newCameraPosition, rotationZMatrix);
             newCameraPosition = Vector3.Transform(newCameraPosition, rotationYMatrix);
             Position = newCameraPosition;
+            View = Matrix.CreateLookAt(Position, Target, Vector3.Up);
         }
-
+        
         public void Rotate(float angleInRadians)
         {
             _currentAngelY += angleInRadians;

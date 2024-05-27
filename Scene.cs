@@ -4,6 +4,7 @@ using Architecture.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Runtime.Intrinsics.X86;
 
 namespace Architecture
 {
@@ -51,6 +52,8 @@ namespace Architecture
                 _zoomMaximalSpeed = value;
             }
         }
+
+        public Vector3 CameraDelta { get; private set; } = Vector3.Zero;
 
         protected float ZoomSpeed
         {
@@ -140,6 +143,15 @@ namespace Architecture
             _rightArrowPress = false;
         }
 
+        public void ChangeCameraTarget(Vector3 target)
+        {
+            CameraDelta += target;
+            foreach (var cube in CubeManager.Elements)
+            {
+                var point = new Vector3(cube.Position.X - target.X, cube.Position.Y, cube.Position.Z - target.Z);
+                cube.MoveTo(point, 0.03f, true);
+            }
+        }
 
         private void ZoomCamera(GameTime gameTime)
         {

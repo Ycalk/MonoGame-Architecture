@@ -172,11 +172,11 @@ namespace Architecture.Entities
             _disappearingTime = disappearingTime;
         }
 
-        public void MoveTo(Vector3 position, float movingTime)
+        public void MoveTo(Vector3 position, float movingTime, bool considerDistance)
         {
             _startPosition = World.Translation;
             _endPosition = position;
-            _totalMovingTime = movingTime;
+            _totalMovingTime = movingTime * (considerDistance ? (position - _startPosition).Length() : 1);
             _currentMovingTime = 0;
             _isMoving = true;
         }
