@@ -11,6 +11,7 @@ namespace Architecture
     public class Scene
     {
         public IEnumerable<IInteractive> Ignoring => ButtonManager.Ignoring().Cast<IInteractive>().Concat(CubeManager.Ignoring());
+        public bool ChangingTarget => _changeCameraTargetIgnoringTimer > 0;
 
         protected Texture2D Background;
         protected readonly ButtonManager ButtonManager;
@@ -159,7 +160,7 @@ namespace Architecture
                 var movingTime = 0.03f;
                 var point = new Vector3(cube.Position.X - target.X, cube.Position.Y, cube.Position.Z - target.Z);
                 cube.MoveTo(point, movingTime, true);
-                _changeCameraTargetIgnoringTimer = Math.Max(_changeCameraTargetIgnoringTimer, movingTime * (point - cube.Position).Length());
+                _changeCameraTargetIgnoringTimer = Math.Max(_changeCameraTargetIgnoringTimer, movingTime * 2 * (point - cube.Position).Length());
             }
         }
 
