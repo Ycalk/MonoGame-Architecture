@@ -127,6 +127,17 @@ namespace Architecture
                 _changeCameraTargetIgnoringTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
+        public void Clear()
+        {
+            _zoomCurrentSpeed = 0;
+            _rotationCurrentSpeed = 0;
+            _changeCameraTargetIgnoringTimer = 0;
+            CameraDelta = new Vector3(0,0,0);
+        }
+
+        public void RotateCamera(float angle) =>
+            CubeManager.RotateCamera(angle);
+
         private void RotateCamera(GameTime gameTime)
         {
             if (_rightArrowPress || _leftArrowPress)
