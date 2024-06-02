@@ -20,6 +20,13 @@ namespace Architecture
         protected readonly CubeManager CubeManager;
         protected readonly GraphicsDevice Graphics;
 
+        public static Scene Empty(GraphicsDevice device) => new Scene(Array.Empty<Button>(),
+            Array.Empty<Image>(),
+            Array.Empty<Text>(),
+            Array.Empty<Cube>(),
+            device,
+            Sprite.GeSolidColorTexture(device, Color.White,
+                device.Viewport.Width, device.Viewport.Height));
 
         protected float RotationMaximalSpeed
         {
@@ -161,14 +168,13 @@ namespace Architecture
             _rightArrowPress = false;
         }
 
-        public void ChangeCameraTarget(Vector3 target)
+        public void ChangeCameraTarget(Vector3 target, float movingTime)
         {
             if (_changeCameraTargetIgnoringTimer > 0)
                 return;
             CameraDelta += target;
             foreach (var cube in CubeManager.Elements)
             {
-                var movingTime = 0.03f;
                 var point = new Vector3(cube.Position.X - target.X, cube.Position.Y, cube.Position.Z - target.Z);
                 cube.MoveTo(point, movingTime, true);
                 _changeCameraTargetIgnoringTimer = Math.Max(_changeCameraTargetIgnoringTimer, movingTime * 2 * (point - cube.Position).Length());
