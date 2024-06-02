@@ -134,12 +134,20 @@ namespace Architecture
                 _changeCameraTargetIgnoringTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        public void Clear()
+        public void Reset()
         {
             _zoomCurrentSpeed = 0;
             _rotationCurrentSpeed = 0;
             _changeCameraTargetIgnoringTimer = 0;
             CameraDelta = new Vector3(0,0,0);
+        }
+
+        public void Clear()
+        {
+            ButtonManager.Clear();
+            ImageManager.Clear();
+            TextManager.Clear();
+            CubeManager.Clear();
         }
 
         public void RotateCamera(float angle) =>
