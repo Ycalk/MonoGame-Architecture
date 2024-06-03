@@ -79,6 +79,7 @@ namespace Architecture.Entities
 
         internal override void Update(GameTime gameTime, Screen screen)
         {
+            base.Update(gameTime, screen);
             IsHovered = CheckIntersection(screen);
             if (Ignoring) return;
             if (IsPressed && !_pressing)

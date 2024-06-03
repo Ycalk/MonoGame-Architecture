@@ -28,7 +28,7 @@ namespace Architecture
             Sprite.GeSolidColorTexture(device, Color.White,
                 device.Viewport.Width, device.Viewport.Height));
 
-        protected float RotationMaximalSpeed
+        public float RotationMaximalSpeed
         {
             get => _rotationMaximalSpeed;
             set
@@ -39,7 +39,7 @@ namespace Architecture
             }
         }
 
-        protected float RotationSpeed
+        public float RotationSpeed
         {
             get => _rotationSpeed;
             set
@@ -50,7 +50,7 @@ namespace Architecture
             }
         }
 
-        protected float ZoomMaximalSpeed
+        public float ZoomMaximalSpeed
         {
             get => _zoomMaximalSpeed;
             set
@@ -63,7 +63,7 @@ namespace Architecture
 
         public Vector3 CameraDelta { get; private set; } = Vector3.Zero;
 
-        protected float ZoomSpeed
+        public float ZoomSpeed
         {
             get => _zoomSpeed;
             set
