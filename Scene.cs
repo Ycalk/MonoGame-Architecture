@@ -185,8 +185,10 @@ namespace Architecture
             {
                 var point = new Vector3(cube.Position.X - target.X, cube.Position.Y, cube.Position.Z - target.Z);
                 cube.MoveTo(point, movingTime, true);
-                _changeCameraTargetIgnoringTimer = Math.Max(_changeCameraTargetIgnoringTimer, movingTime * 2 * (point - cube.Position).Length());
+                _changeCameraTargetIgnoringTimer = Math.Max(_changeCameraTargetIgnoringTimer, movingTime * (point - cube.Position).Length());
             }
+
+            _changeCameraTargetIgnoringTimer += 0.3f;
         }
 
         private void ZoomCamera(GameTime gameTime)
